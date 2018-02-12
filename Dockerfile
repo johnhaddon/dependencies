@@ -16,6 +16,8 @@ RUN yum install epel-release -y
 RUN yum install cmake3 -y
 RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
 
+RUN yum install scons -y
+
 # Needed by boost::iostreams
 
 RUN yum install bzip2-devel -y
@@ -44,16 +46,6 @@ RUN yum install patch -y
 
 RUN yum install doxygen -y
 
-# EPEL, so we can get CMake 3
-
-# THE BELOW CAN MAYBE BE DONE WITH `yum install epel-release`
-
-#wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-#rpm -ivh epel-release-6-8.noarch.rpm
-
-#yum install cmake3
-#ln -s /usr/bin/cmake3 /usr/bin/cmake
-
 # Needed by OSL
 
 RUN yum install flex -y
@@ -61,8 +53,8 @@ RUN yum install bison -y
 
 COPY . /gafferDependenciesSource
 
-ENV ARNOLD_ROOT /
-ENV RMAN_ROOT /
+ENV ARNOLD_ROOT /gafferDependenciesSource/3rdParty/arnold
+ENV RMAN_ROOT /gafferDependenciesSource/3rdParty/3delight
 ENV BUILD_DIR /gafferDependenciesBuild
 
 ENV PATH /opt/rh/devtoolset-6/root/usr/bin:$PATH
@@ -73,4 +65,4 @@ RUN ls /gafferDependenciesSource/build
 
 WORKDIR /gafferDependenciesSource
 
-RUN ./build/buildAll.sh
+#RUN ./build/buildAll.sh
