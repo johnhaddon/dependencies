@@ -6,50 +6,55 @@ FROM centos:6
 
 # Make GCC 6.3.1 the default compiler, as per VFXPlatform 2018
 
-RUN yum install centos-release-scl -y
-RUN yum install devtoolset-6 -y
+RUN yum install -y centos-release-scl
+RUN yum install -y devtoolset-6
 RUN scl enable devtoolset-6 bash
 
 # So we can build stuff
 
-RUN yum install epel-release -y
-RUN yum install cmake3 -y
+RUN yum install -y epel-release
+RUN yum install -y cmake3
 RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
 
-RUN yum install scons -y
+RUN yum install -y scons
 
 # Needed by boost::iostreams
 
-RUN yum install bzip2-devel -y
+RUN yum install -y bzip2-devel
 
 # Needed to build libjpeg
 
-RUN yum install nasm -y
+RUN yum install -y nasm
 
 # Needed for png
 
-RUN yum install zlib-devel -y
+RUN yum install -y zlib-devel
 
 # Needed for GLEW
 
-RUN yum install libX11-devel -y
-RUN yum install mesa-libGL-devel -y
-RUN yum install mesa-libGLU-devel -y
-RUN yum install libXmu-devel -y
-RUN yum install libXi-devel -y
+RUN yum install -y libX11-devel
+RUN yum install -y mesa-libGL-devel
+RUN yum install -y mesa-libGLU-devel
+RUN yum install -y libXmu-devel
+RUN yum install -y libXi-devel
 
 # Needed for OCIO
 
-RUN yum install patch -y
+RUN yum install -y patch
 
 # Needed by various things probably
 
-RUN yum install doxygen -y
+RUN yum install -y doxygen
 
 # Needed by OSL
 
-RUN yum install flex -y
-RUN yum install bison -y
+RUN yum install -y flex
+RUN yum install -y bison
+
+# Needed by Qt
+
+yum install -y xkeyboard-config.noarch
+yum install -y fontconfig-devel.x86_64
 
 COPY . /gafferDependenciesSource
 
@@ -65,4 +70,4 @@ RUN ls /gafferDependenciesSource/build
 
 WORKDIR /gafferDependenciesSource
 
-#RUN ./build/buildAll.sh
+RUN ./build/buildAll.sh
