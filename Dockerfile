@@ -53,8 +53,8 @@ RUN yum install -y bison
 
 # Needed by Qt
 
-yum install -y xkeyboard-config.noarch
-yum install -y fontconfig-devel.x86_64
+RUN yum install -y xkeyboard-config.noarch
+RUN yum install -y fontconfig-devel.x86_64
 
 COPY . /gafferDependenciesSource
 
