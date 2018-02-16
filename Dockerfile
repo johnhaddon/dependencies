@@ -1,4 +1,36 @@
-# Start with an ancient OS, so our builds are very
+# Docker builds
+# =============
+#
+# The purpose of the GafferHQ/dependencies project is to provide
+# a consistent, repeatable, build recipe for all of Gaffer's
+# dependencies. To ensure repeatability we use Docker to perform
+# all release builds, so that the exact same build environment is
+# used each time.
+#
+# Usage
+# -----
+#
+# Make sure the 3rd party dependencies are available to the build :
+#
+# - Copy your Arnold installation to 3rdParty/arnold
+# - Copy your 3Delight installation to 3rdParty/3delight
+#
+# > Note : It is _not_ sufficient to use symlinks, as these will
+# > not be followed when copying files into the docker container.
+#
+# Run the build :
+#
+# `docker build -t gaffer-dependencies .`
+#
+# Extract the result :
+#
+# ```
+# container=`docker create gaffer-dependencies`
+# docker cp $container:/gafferDependencies-0.44.0.0-linux.tar.gz ./
+# docker rm $container
+# ```
+
+# We start with an ancient OS, so our builds are very
 # permissive in terms of their glibc requirements
 # when deployed elsewhere.
 
@@ -9,28 +41,31 @@ FROM centos:6
 RUN yum install -y centos-release-scl
 RUN yum install -y devtoolset-6
 RUN scl enable devtoolset-6 bash
+ENV PATH /opt/rh/devtoolset-6/root/usr/bin:$PATH
 
-# So we can build stuff
+# Install CMake, SCons, and other miscellaneous build tools.
 
 RUN yum install -y epel-release
 RUN yum install -y cmake3
 RUN ln -s /usr/bin/cmake3 /usr/bin/cmake
 
 RUN yum install -y scons
+RUN yum install -y patch
+RUN yum install -y doxygen
 
-# Needed by boost::iostreams
+# Install boost dependencies (needed by boost::iostreams)
 
 RUN yum install -y bzip2-devel
 
-# Needed to build libjpeg
+# Install JPEG dependencies
 
 RUN yum install -y nasm
 
-# Needed for png
+# Install PNG dependencies
 
 RUN yum install -y zlib-devel
 
-# Needed for GLEW
+# Install GLEW dependencies
 
 RUN yum install -y libX11-devel
 RUN yum install -y mesa-libGL-devel
@@ -38,35 +73,25 @@ RUN yum install -y mesa-libGLU-devel
 RUN yum install -y libXmu-devel
 RUN yum install -y libXi-devel
 
-# Needed for OCIO
-
-RUN yum install -y patch
-
-# Needed by various things probably
-
-RUN yum install -y doxygen
-
-# Needed by OSL
+# Install OSL dependencies
 
 RUN yum install -y flex
 RUN yum install -y bison
 
-# Needed by Qt
+# Install Qt dependencies
 
 RUN yum install -y xkeyboard-config.noarch
 RUN yum install -y fontconfig-devel.x86_64
 
+# Copy over the entire source tree
+
 COPY . /gafferDependenciesSource
+
+# Build!
 
 ENV ARNOLD_ROOT /gafferDependenciesSource/3rdParty/arnold
 ENV RMAN_ROOT /gafferDependenciesSource/3rdParty/3delight
 ENV BUILD_DIR /gafferDependenciesBuild
-
-ENV PATH /opt/rh/devtoolset-6/root/usr/bin:$PATH
-
-RUN ls
-RUN ls /gafferDependenciesSource
-RUN ls /gafferDependenciesSource/build
 
 WORKDIR /gafferDependenciesSource
 
