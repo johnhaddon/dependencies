@@ -40,8 +40,6 @@ FROM centos:6
 
 RUN yum install -y centos-release-scl
 RUN yum install -y devtoolset-6
-RUN scl enable devtoolset-6 bash
-ENV PATH /opt/rh/devtoolset-6/root/usr/bin:$PATH
 
 # Install CMake, SCons, and other miscellaneous build tools.
 
@@ -83,16 +81,23 @@ RUN yum install -y bison
 RUN yum install -y xkeyboard-config.noarch
 RUN yum install -y fontconfig-devel.x86_64
 
-# Copy over the entire source tree
+# Install packages needed to generate the
+# Gaffer documentation. Note that we are
+# limited to Sphinx 1.4 because recommonmark
+# is incompatible with later versions.
 
-COPY . /gafferDependenciesSource
+RUN yum install -y python27-python-pip.noarch
+RUN scl enable python27 -- bash -c 'pip install sphinx==1.4 sphinx_rtd_theme recommonmark'
+
+#COPY . /gafferDependenciesSource
 
 # Build!
 
-ENV ARNOLD_ROOT /gafferDependenciesSource/3rdParty/arnold
-ENV RMAN_ROOT /gafferDependenciesSource/3rdParty/3delight
-ENV BUILD_DIR /gafferDependenciesBuild
+#ENV ARNOLD_ROOT /gafferDependenciesSource/3rdParty/arnold
+#ENV RMAN_ROOT /gafferDependenciesSource/3rdParty/3delight
+#ENV BUILD_DIR /gafferDependenciesBuild
 
-WORKDIR /gafferDependenciesSource
+#WORKDIR /gafferDependenciesSource
 
-RUN ./build/buildAll.sh
+#RUN ./build/buildAll.sh
+#ENV PATH /opt/rh/devtoolset-6/root/usr/bin:$PATH
