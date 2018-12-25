@@ -2,7 +2,7 @@
 
 	"downloads" : [
 
-		"https://github.com/mottosso/Qt.py/archive/1.1.0.b3.tar.gz"
+		"https://github.com/mottosso/Qt.py/archive/1.1.0.tar.gz"
 	],
 
 	"license" : "LICENSE",
