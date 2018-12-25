@@ -55,6 +55,7 @@ def __loadConfig( project, buildDir ) :
 	variables.update( {
 		"buildDir" : buildDir,
 		"jobs" : multiprocessing.cpu_count(),
+		"path" : os.environ["PATH"],
 	} )
 
 	def __substitute( o ) :
