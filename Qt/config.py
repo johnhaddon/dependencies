@@ -8,6 +8,8 @@
 
 	"license" : "LICENSE.LGPLv21",
 
+	"dependencies" : [ "LibPNG", "LibTIFF", "LibJPEG-Turbo", "FreeType" ],
+
 	"environment" : {
 
 		"LD_LIBRARY_PATH" : "{buildDir}/lib",

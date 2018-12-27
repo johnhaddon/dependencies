@@ -11,6 +11,8 @@
 
 	"license" : "LICENSE",
 
+	"dependencies" : [ "Python" ],
+
 	"environment" : {
 
 		"LD_LIBRARY_PATH" : "{buildDir}/lib",

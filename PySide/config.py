@@ -8,6 +8,8 @@
 
 	"license" : "LICENSE.LGPLv3",
 
+	"dependencies" : [ "Python", "Qt", "SetupTools" ],
+
 	"environment" : {
 
 		"LD_LIBRARY_PATH" : "{buildDir}/lib",
