@@ -25,4 +25,3 @@ fi
 
 cd `dirname $0`
 (cd .. && ./build/build.py --buildDir $BUILD_DIR)
-./buildPackage.sh
