@@ -30,4 +30,14 @@
 
 	],
 
+	"manifest" : [
+
+		"include/OpenEXR/Py*.h",
+		"lib/libPyIex*$SHLIBSUFFIX*",
+		"lib/libPyImath*$SHLIBSUFFIX*",
+		"python/iexmodule*",
+		"python/imathmodule*",
+
+	],
+
 }

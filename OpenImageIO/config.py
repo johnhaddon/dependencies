@@ -25,4 +25,16 @@
 
 	],
 
+	"manifest" : [
+
+		"bin/maketx",
+		"bin/oiiotool",
+
+		"include/OpenImageIO",
+		"lib/libOpenImageIO*$SHLIBSUFFIX*",
+
+		"doc/openimageio.pdf",
+
+	],
+
 }

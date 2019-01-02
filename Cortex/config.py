@@ -56,4 +56,19 @@
 
 	],
 
+	"manifest" : [
+
+		"include/IECore*",
+		"lib/libIECore*{sharedLibrarySuffix}",
+		"python/IECore*",
+		"renderMan",
+		"arnold",
+		"appleseedDisplays",
+		"glsl/IECoreGL",
+		"glsl/*.frag",
+		"glsl/*.vert",
+		"doc/cortex/html",
+
+	],
+
 }

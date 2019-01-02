@@ -16,6 +16,13 @@
 
 	],
 
+	"manifest" : [
+
+		"include/tbb",
+		"lib/libtbb*{sharedLibrarySuffix}*",
+
+	],
+
 	"platform:linux" : {
 
 		"environment" : {

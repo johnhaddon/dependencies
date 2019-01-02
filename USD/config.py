@@ -31,4 +31,32 @@
 
 	],
 
+	"manifest" : [
+
+		"bin/usd*",
+		"bin/sdfdump",
+
+		"include/pxr",
+
+		"lib/libtrace{sharedLibrarySuffix}",
+		"lib/libarch{sharedLibrarySuffix}",
+		"lib/libtf{sharedLibrarySuffix}",
+		"lib/libjs{sharedLibrarySuffix}",
+		"lib/libwork{sharedLibrarySuffix}",
+		"lib/libplug{sharedLibrarySuffix}",
+		"lib/libkind{sharedLibrarySuffix}",
+		"lib/libgf{sharedLibrarySuffix}",
+		"lib/libvt{sharedLibrarySuffix}",
+		"lib/libar{sharedLibrarySuffix}",
+		"lib/libsdf{sharedLibrarySuffix}",
+		"lib/libpcp{sharedLibrarySuffix}",
+		"lib/libusd*{sharedLibrarySuffix}",
+		"lib/usd",
+
+		"python/pxr",
+
+		"share/usd",
+
+	],
+
 }
