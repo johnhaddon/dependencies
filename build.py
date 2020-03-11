@@ -51,7 +51,7 @@ def __decompress( archive ) :
 		# Badly behaved archive
 		return "./"
 
-def __loadConfig( project ) :
+def __loadJSON( project ) :
 
 	# Load file. Really we want to use JSON to
 	# enforce a "pure data" methodology, but JSON
@@ -61,22 +61,19 @@ def __loadConfig( project ) :
 	# syntax that we can use in practice.
 
 	with open( project + "/config.py" ) as f :
-		config =f.read()
+		config = f.read()
 
-	config = eval( config )
+	return eval( config )
 
-	# Apply platform-specific config overrides.
+def __applyConfigOverrides( config, key ) :
 
-	platform = "platform:osx" if sys.platform == "darwin" else "platform:linux"
-	platformOverrides = config.pop( platform, {} )
-	for key, value in platformOverrides.items() :
+	overrides = config.get( key, {} )
+	for key, value in overrides.items() :
 
 		if isinstance( value, dict ) and key in config :
 			config[key].update( value )
 		else :
 			config[key] = value
-
-	return config
 
 def __substitute( config, variables, forDigest = False ) :
 
@@ -123,13 +120,18 @@ def __updateDigest( project, config ) :
 		with open( patch ) as f :
 			config["digest"].update( f.read() )
 
-def __loadConfigs( variables ) :
+def __loadConfigs( variables, variants ) :
 
-	# Load configs
+	# Load configs and apply variants and platform overrides.
 
 	configs = {}
 	for project in __projects() :
-		configs[project] = __loadConfig( project )
+		configs[project] = __loadJSON( project )
+		if project in variants :
+			__applyConfigOverrides( configs[project], "variant:{}".format( variants[project] ) )
+		for variantProject, variant in variants.items() :
+			__applyConfigOverrides( configs[project], "variant:{}:{}".format( variantProject, variant ) )
+		__applyConfigOverrides( configs[project], "platform:osx" if sys.platform == "darwin" else "platform:linux" )
 
 	# Walk dependency tree to compute digests and
 	# apply substitutions.
@@ -327,11 +329,31 @@ parser.add_argument(
 
 parser.add_argument(
 	"--package",
-	default = "gafferDependencies-{version}-{platform}.tar.gz",
+	default = "gafferDependencies-{version}{variants}-{platform}.tar.gz",
 	help = "The filename of the tarball package to create.",
 )
 
+for project in __projects() :
+
+	config = __loadJSON( project )
+	variants = config.get( "variants" )
+	if not variants :
+		continue
+
+	parser.add_argument(
+		"--variant:{}".format( project ),
+		choices = variants,
+		nargs = 1,
+		default = variants[0],
+		help = "The build variant for {}.".format( project )
+	)
+
 args = parser.parse_args()
+
+variants = {}
+for key, value in vars( args ).items() :
+	if key.startswith( "variant:" ) :
+		variants[key[8:]] = value[0]
 
 variables = {
 	"buildDir" : args.buildDir,
@@ -340,9 +362,10 @@ variables = {
 	"version" : __version,
 	"platform" : "osx" if sys.platform == "darwin" else "linux",
 	"sharedLibraryExtension" : ".dylib" if sys.platform == "darwin" else ".so",
+	"variants" : "".join( "-{}{}".format( key, variants[key] ) for key in sorted( variants.keys() ) ),
 }
 
-configs = __loadConfigs( variables )
+configs = __loadConfigs( variables, variants )
 
 __checkEnvironment( args.projects, configs )
 __buildProjects( args.projects, configs, args.buildDir )
