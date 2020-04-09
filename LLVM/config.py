@@ -2,8 +2,8 @@
 
 	"downloads" : [
 
-		"http://releases.llvm.org/5.0.1/llvm-5.0.1.src.tar.xz",
-		"http://releases.llvm.org/5.0.1/cfe-5.0.1.src.tar.xz"
+		"https://github.com/llvm/llvm-project/releases/download/llvmorg-7.1.0/llvm-7.1.0.src.tar.xz",
+		"https://github.com/llvm/llvm-project/releases/download/llvmorg-7.1.0/cfe-7.1.0.src.tar.xz"
 
 	],
 

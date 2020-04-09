@@ -8,6 +8,8 @@ This major version introduces the concept of build variants, and provides packag
 - Boost : Updated to version 1.68.0.
 - OpenEXR : Updated to version 1.4.1.
 - Python : Added version 3.7.6.
+- OpenShadingLanguage : Updated to version 1.9.13.
+- LLVM : Updated to version 7.1.0.
 - Six : Added version 1.14.0.
 
 1.2.0
