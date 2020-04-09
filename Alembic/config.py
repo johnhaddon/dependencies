@@ -22,12 +22,6 @@
 			" -D HDF5_ROOT={buildDir}"
 			" -D ALEMBIC_PYILMBASE_INCLUDE_DIRECTORY={buildDir}/include/OpenEXR"
 			" -D USE_HDF5=TRUE"
-			# Temporarily disabling python bindings because the Alembic
-			# setup isn't savvy to Boost's renaming of `libboost_python.so`
-			# to `libboost_python37.so`. Let's see how much other projects are
-			# screwed by this before deciding on a solution.
-			#" -D USE_PYILMBASE=TRUE"
-			#" -D USE_PYALEMBIC=TRUE"
 			" -D USE_ARNOLD=FALSE"
 			" -D USE_PRMAN=FALSE"
 			" -D USE_MAYA=FALSE"
@@ -36,9 +30,6 @@
 
 		"make VERBOSE=1 -j {jobs}",
 		"make install",
-
-		#"mkdir -p {buildDir}/python",
-		#"mv {buildDir}/lib/python*/site-packages/alembic* {buildDir}/python",
 
 	],
 
