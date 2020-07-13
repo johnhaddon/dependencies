@@ -1,0 +1,106 @@
+name: CI
+
+on: [push]
+
+  #   branches:
+  #     - master
+  #     - '*_maintenance'
+  # pull_request:
+  #   branches:
+  #     - master
+  #     - '*_maintenance'
+
+jobs:
+
+  build:
+
+    env:
+      ARNOLD_ROOT: /tmp
+      RMAN_ROOT: /tmp
+
+    strategy:
+
+      # Don't cancel other jobs in the build matrix if one job fails.
+      fail-fast: false
+
+      matrix:
+
+        # Rather than generate all permutations of various settings,
+        # we want to explicitly list each of the variants we want to
+        # test. We can use `name` to declare the names of our variants,
+        # and then use `include` to define their settings.
+
+        name: [
+          linux,
+          linux-python3,
+          macos,
+        ]
+
+        include:
+
+          - name: linux
+            os: ubuntu-16.04
+            containerImage: gafferhq/build:1.1.0
+            pythonVariant: "2"
+
+          - name: linux-python3
+            os: ubuntu-16.04
+            containerImage: gafferhq/build:1.1.0
+            pythonVariant: "3"
+
+          - name: macos
+            os: macos-10.15
+            containerImage:
+            pythonVariant: "2"
+
+    runs-on: ${{ matrix.os }}
+
+    container: ${{ matrix.containerImage }}
+
+    # env:
+    #   DISPLAY: ":99.0"
+    #   ARNOLD_LICENSE_ORDER: none # Don't waste time looking for a license that doesn't exist
+
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - name: Install toolchain (MacOS)
+      # Prefer `pip install` where possible because it is faster
+      # than `brew install`.
+      run: |
+        sudo pip install scons==3.1.2
+      if: runner.os == 'macOS'
+
+    - name: Install toolchain (Linux)
+      run: |
+        echo "::add-path::/opt/rh/devtoolset-6/root/bin"
+      if: runner.os == 'Linux'
+
+    # - name: Install dependencies
+    #   # The `::set-env` shenanigans creates an environment variable
+    #   # containing the hash of the archive, for use in the cache key
+    #   # below.
+    #   run: |
+    #     python .github/workflows/main/installDependencies.py --archiveURL ${{ matrix.dependenciesURL }} --dependenciesDir ./build --outputFormat "::set-env name=GAFFER_DEPENDENCIES_HASH::{archiveDigest}"
+    #     ./config/installDelight.sh
+    #     echo ::set-env name=DELIGHT::$GITHUB_WORKSPACE/3delight
+
+    # - name: Cache
+    #   uses: actions/cache@v1
+    #   with:
+    #     path: sconsCache
+    #     key: ${{ runner.os }}-${{ matrix.containerImage }}-${{env.GAFFER_DEPENDENCIES_HASH}}-${{ matrix.buildType }}-${{ github.sha }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-${{ matrix.containerImage }}-${{env.GAFFER_DEPENDENCIES_HASH}}-${{ matrix.buildType }}-
+
+    - name: Build
+      run: |
+        ./build.py --variant:Python ${{ matrix.pythonVariant }}
+
+    # - name: Limit cache size
+    #   # GitHub has a limit of 5G for all caches in a repository. Because we write new
+    #   # files into `./sconsCache` with every build, we must trim its size to avoid
+    #   # unbounded growth. In practice, the archives that get uploaded are much smaller
+    #   # than the limit we apply here, because they're compressed.
+    #   run: ./.github/workflows/main/limitDirectorySize.py --directory ./sconsCache --megabytes ${{ matrix.sconsCacheMegabytes }} --verbose
