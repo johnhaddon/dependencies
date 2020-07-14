@@ -70,8 +70,8 @@ jobs:
       # than `brew install`.
       run: |
         sudo pip install scons==3.1.2
-        ls /Applications
         sudo xcode-select -s /Applications/Xcode_10.3.app/Contents/Developer
+        brew install nasm
       if: runner.os == 'macOS'
 
     - name: Install toolchain (Linux)
