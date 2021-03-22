@@ -3,6 +3,7 @@
 
 - TBB : Updated to version 2020 Update 2.
 - OpenShadingLanguage : Updated to version 1.11.12.0.
+- USD : Updated to version 21.02.
 
 3.0.0 alpha 2
 -------------
