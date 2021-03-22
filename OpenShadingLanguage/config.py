@@ -2,7 +2,7 @@
 
 	"downloads" : [
 
-		"https://github.com/imageworks/OpenShadingLanguage/archive/Release-1.11.11.0.tar.gz"
+		"https://github.com/AcademySoftwareFoundation/OpenShadingLanguage/archive/refs/tags/v1.11.12.0.tar.gz"
 
 	],
 
