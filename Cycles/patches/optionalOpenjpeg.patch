@@ -1,0 +1,11 @@
+--- a/src/cmake/external_libs.cmake
++++ b/src/cmake/external_libs.cmake
+@@ -234,7 +234,7 @@ if(CYCLES_STANDALONE_REPOSITORY)
+   endif()
+ 
+   find_package(JPEG REQUIRED)
+-  find_package(OpenJPEG REQUIRED)
++  find_package(OpenJPEG)
+   find_package(TIFF REQUIRED)
+   find_package(PNG REQUIRED)
+ endif()
