@@ -29,6 +29,8 @@
 		"mkdir -p {buildDir}/cycles/include",
 		"cp -r build/bin {buildDir}/cycles",
 		"cp -r build/lib {buildDir}/cycles",
+		"cp -r build/shader {buildDir}/cycles",
+		"cp -r build/source {buildDir}/cycles",
 		"cd src && cp --parents */*.h */*/*.h {buildDir}/cycles/include",
 		"cp -r third_party/atomic/* {buildDir}/cycles/include",
 	],
